@@ -23,8 +23,8 @@ The circuit included arrangements for the clock signal, input switches, and LED 
 While the specific details of challenges are not distinctly remembered, typical issues in such projects include aligning the physical circuit with the simulated design, troubleshooting unexpected behaviors, and optimizing the use of available components.
 
 ## Testing and Results
-Testing Procedure: The FSM's functionality was tested by providing various input combinations and observing the corresponding LED outputs, both in Multisim and on the breadboard.
-Results: The testing confirmed that the physical implementation successfully mirrored the simulated design, with all states of the FSM being correctly represented and transitioned according to the input.
+* Testing Procedure: The FSM's functionality was tested by providing various input combinations and observing the corresponding LED outputs, both in Multisim and on the breadboard.
+* Results: The testing confirmed that the physical implementation successfully mirrored the simulated design, with all states of the FSM being correctly represented and transitioned according to the input.
 
 ## Conclusion
 * Learnings: This project reinforced the importance of thorough simulation before physical implementation and provided valuable experience in translating theoretical designs into practical applications.
