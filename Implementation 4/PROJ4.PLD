@@ -1,0 +1,59 @@
+Name     Proj4 ;
+PartNo   00 ;
+Date     12/5/2023 ;
+Revision 01 ;
+Designer Vyomakesh Puduru ;
+Company  Penn State  ;
+Assembly None ;
+Location  ;
+Device   g16v8a ;
+
+/* *************** INPUT PINS *********************/
+PIN   1 = CLK                       ; /*external clock input             */
+PIN   4 = !K1				 ; /*K1 INPUT BIT STREAM            */
+PIN   5 = !K2				 ; /*K1 INPUT BIT STREAM            */
+PIN   6 = !RES				 ; /*RESET INPUT BIT STREAM         */ 
+
+/* *************** OUTPUT PINS *********************/
+PIN  19 = G			 	 ; /*ASSIGN PIN 19 YO GREEN LED*/       
+PIN  18 = Y2				 ; /*ASSIGN PIN 18 TO Y2 LED         */
+PIN  17 = Y1				 ; /*ASSIGN PIN 17 TO Y1 LED         */
+PIN  16 = R				 ; /*ASSIGN PIN 16 TO RED LED*/
+PIN 15 = QA;
+PIN 14 = QB;
+PIN 13 = QC;
+
+/* Define states for fsm 				   */
+FIELD state_n = [QA,QB,QC];
+$define S0 'b'000
+$define S1 'b'001
+$define S2 'b'010
+$define S3 'b'011
+$define S4 'b'100
+
+
+/* Implement FSM					   */
+SEQUENCED state_n {
+PRESENT S0
+		IF !K2 & K1 & !RES NEXT S1 OUT !G OUT !Y2 OUT Y1 OUT !R;
+		IF K2 # !K1 # RES NEXT S0 OUT !G OUT !Y2 OUT !Y1 OUT R;
+PRESENT S1
+		IF K2 & !RES NEXT S0 OUT !G OUT !Y2 OUT !Y1 OUT R;
+		IF !K2 & K1 & !RES NEXT S1 OUT !G OUT !Y2 OUT Y1 OUT !R;
+		IF !K2 & !K1 & !RES NEXT S2 OUT !G OUT Y2 OUT !Y1 OUT !R;
+		IF RES NEXT S0 OUT !G OUT !Y2 OUT !Y1 OUT R;
+PRESENT S2
+		IF K1 & !RES NEXT S0 OUT !G OUT !Y2 OUT !Y1 OUT R;
+		IF !K2 & !K1 & !RES NEXT S2 OUT !G OUT Y2 OUT !Y1 OUT !R;
+		IF K2 & !K1 & !RES NEXT S3 OUT !G OUT Y2 OUT Y1 OUT !R;
+		IF RES NEXT S0 OUT !G OUT !Y2 OUT !Y1 OUT R;
+PRESENT S3 
+		IF K1 & !RES NEXT S0 OUT !G OUT !Y2 OUT !Y1 OUT R;
+		IF K2 & !K1 & !RES NEXT S3 OUT !G OUT Y2 OUT Y1 OUT !R;
+		IF !K2 & !K1 & !RES NEXT S4 OUT G OUT !Y2 OUT !Y1 OUT !R;
+		IF RES NEXT S0 OUT !G OUT !Y2 OUT !Y1 OUT R;
+PRESENT S4
+		IF K2 & K1 & !RES NEXT S0 OUT !G OUT !Y2 OUT !Y1 OUT R;
+		IF(K2 # K1) & !RES NEXT S4 OUT G OUT !Y2 OUT !Y1 OUT !R;
+		IF RES NEXT S0 OUT !G OUT !Y2 OUT !Y1 OUT R;
+}
